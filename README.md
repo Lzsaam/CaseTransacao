@@ -57,7 +57,7 @@ python main.py
 pytest test_transacao.py -v
 ```
 
-### Detalhe de Arquitetura Sênior (Threads C# vs. Python GIL)
+###  (Threads C# vs. Python GIL)
 *Nota de System Design:* Diferente do `.NET / C#` onde as requisições teriam threads OS puras, o ecossistema CPython possui o **Global Interpreter Lock**. A escolha do `ThreadPoolExecutor(max_workers=8)` aqui, aliada aos locks de transações granulares (`conta_id`), serve para emular perfeitamente que essa aplicação será *IO-Bound* num cenário real (a operação da transação chamaria um bando de dados como Postgres via I/O Wait). Portanto, usar threads na orquestração é totalmente produtivo em Python, contanto que o código no repositório de dados cuide das travas contra _race conditions_. O uso de *AsyncIO* não foi incluído para manter total similaridade assíncrona com o desafio via *Parallel.ForEach* clássico, com menos refatoração imperativa.
 
 ### Visão de Futuro e Escalabilidade (O Cenário de um Grande Banco)
